@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Unreliable Witness</title>
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #111827;
+      color: #f9fafb;
+      max-width: 850px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #c4b5fd;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+    }
+
+    .panel {
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .evidence-item {
+      border-bottom: 1px solid #374151;
+      padding: 12px 0;
+    }
+
+    .evidence-item:last-child {
+      border-bottom: none;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    select,
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #6b7280;
+      background: #f9fafb;
+      color: #111827;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    button {
+      background: #a78bfa;
+      color: #111827;
+      font-weight: bold;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #c4b5fd;
+    }
+
+    #verdict-result {
+      margin-top: 15px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🔎 The Unreliable Witness</h1>
+  <p>Evidence over confident AI.</p>
+
+  <section class="panel">
+    <h2>Case Briefing</h2>
+    <p id="briefing">Loading investigation...</p>
+  </section>
+
+  <section class="panel">
+    <h2>Evidence</h2>
+    <div id="evidence">Loading evidence...</div>
+  </section>
+
+
+<section class="panel">
+  <h2>🤖 AI Investigation Partner</h2>
+
+  <p>
+    Ask Muse Spark about the evidence.
+    Remember: AI conclusions should be verified.
+  </p>
+
+  <label for="ai-question">Your question:</label>
+
+  <textarea
+    id="ai-question"
+    maxlength="500"
+    placeholder="What does the unfamiliar IP address tell us?"
+  ></textarea>
+
+  <p>
+    <button type="button" id="ask-ai">
+      Ask Muse Spark
+    </button>
+  </p>
+
+  <div id="ai-response" role="status"></div>
+</section>
+
+
+  <section class="panel">
+    <h2>Your Verdict</h2>
+
+    <p id="question">
+      Review the evidence before deciding.
+    </p>
+
+    <label for="verdict-choice">
+      Your conclusion:
+    </label>
+
+    <select id="verdict-choice">
+      <option value="">Choose a verdict</option>
+      <option value="compromised">
+        Account compromise confirmed
+      </option>
+      <option value="legitimate">
+        Legitimate activity confirmed
+      </option>
+      <option value="insufficient_evidence">
+        Insufficient evidence to determine
+      </option>
+    </select>
+
+    <p>
+      <label for="reasoning">
+        Explain your reasoning:
+      </label>
+    </p>
+
+    <textarea
+      id="reasoning"
+      placeholder="Which evidence supports your conclusion?"
+    ></textarea>
+
+    <p>
+      <button type="button" id="submit-verdict">
+        Submit Verdict
+      </button>
+    </p>
+
+    <div id="verdict-result" role="status"></div>
+  </section>
+
+  <script>
+    // Load the fictional investigation from FastAPI.
+    async function loadCase() {
+      try {
+        const response = await fetch("/api/case");
+
+        if (!response.ok) {
+          throw new Error("Could not load case");
+        }
+
+        const caseData = await response.json();
+
+        document.getElementById("briefing").textContent =
+          caseData.briefing;
+
+        document.getElementById("question").textContent =
+          caseData.central_question;
+
+        const evidencePanel =
+          document.getElementById("evidence");
+
+        evidencePanel.replaceChildren();
+
+        for (const item of caseData.evidence) {
+          const entry = document.createElement("div");
+          entry.className = "evidence-item";
+
+          const heading = document.createElement("strong");
+          heading.textContent =
+            `${item.id} — ${item.type}`;
+
+          const timestamp = document.createElement("p");
+          timestamp.textContent = item.timestamp;
+
+          const description = document.createElement("p");
+          description.textContent = item.description;
+
+          entry.append(
+            heading,
+            timestamp,
+            description
+          );
+
+          evidencePanel.appendChild(entry);
+        }
+
+      } catch (error) {
+        document.getElementById("briefing").textContent =
+          "Unable to load investigation. Check the server.";
+
+        console.error(error);
+      }
+    }
+
+    // Submit the player's verdict to FastAPI.
+    document.getElementById("submit-verdict")
+      .addEventListener("click", async () => {
+
+        const answer =
+          document.getElementById("verdict-choice").value;
+
+        const reasoning =
+          document.getElementById("reasoning").value.trim();
+
+        const result =
+          document.getElementById("verdict-result");
+
+        if (!answer || !reasoning) {
+          result.textContent =
+            "Choose a verdict and explain your reasoning.";
+          return;
+        }
+
+        result.textContent = "Checking verdict...";
+
+        try {
+          const response = await fetch("/api/verdict", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              answer: answer,
+              reasoning: reasoning
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error("Verdict submission failed");
+          }
+
+          const feedback = await response.json();
+
+          if (feedback.correct) {
+            result.textContent =
+              "✅ Correct conclusion! " +
+              feedback.explanation;
+          } else {
+            result.textContent =
+              "🔎 Reconsider your conclusion. " +
+              feedback.explanation;
+          }
+
+        } catch (error) {
+          result.textContent =
+            "Unable to submit verdict. Check the server.";
+
+          console.error(error);
+        }
+      });
+
+    // Ask Muse Spark about the evidence.
+    document.getElementById("ask-ai")
+      .addEventListener("click", async () => {
+
+        const questionBox =
+          document.getElementById("ai-question");
+
+        const button =
+          document.getElementById("ask-ai");
+
+        const result =
+          document.getElementById("ai-response");
+
+        const question = questionBox.value.trim();
+
+        if (!question) {
+          result.textContent = "Enter a question first.";
+          return;
+        }
+
+        button.disabled = true;
+        result.textContent = "Muse Spark is investigating...";
+
+        try {
+          const response = await fetch("/api/ask", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ question })
+          });
+
+          if (!response.ok) {
+            throw new Error("AI request failed");
+          }
+
+          const data = await response.json();
+
+          result.textContent =
+             data.answer || "No AI response was received.";
+
+        } catch (error) {
+          result.textContent =
+            "Unable to reach Muse Spark. Check the server.";
+          console.error(error);
+
+        } finally {
+          button.disabled = false;
+        }
+      });
+
+    // Start the investigation.
+    loadCase();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+
+{
+  "case_id": "CASE-001",
+  "title": "The Midnight Download",
+  "briefing": "A confidential company file was downloaded from an employee account late at night. The security team wants to know whether the activity indicates an account compromise.",
+  "central_question": "Does the available evidence confirm that the employee account was compromised?",
+  "evidence": [
+    {
+      "id": "E-001",
+      "type": "authentication_log",
+      "timestamp": "2026-10-21T23:41:00Z",
+      "description": "Successful login for employee Jordan Lee from IP address 203.0.113.42. The IP address is not in the employee's recent login history."
+    },
+    {
+      "id": "E-002",
+      "type": "file_access_log",
+      "timestamp": "2026-10-21T23:47:00Z",
+      "description": "Jordan Lee's account downloaded a confidential file named quarterly_financials.xlsx."
+    },
+    {
+      "id": "E-003",
+      "type": "employee_activity_record",
+      "timestamp": "2026-10-21T18:00:00Z",
+      "description": "Jordan Lee had informed their manager that they might work late to prepare a financial report. The record does not confirm whether Jordan performed the login or download."
+    }
+  ],
+  "verdict": {
+    "correct_answer": "insufficient_evidence",
+    "explanation": "The unfamiliar login and confidential download warrant investigation, but they do not establish account compromise. The employee's planned late work is a possible legitimate explanation, not proof of authorization. Additional identity, device, session, and employee confirmation evidence is needed."
+  }
+}
