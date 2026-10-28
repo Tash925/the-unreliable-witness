@@ -1,6 +1,9 @@
 import json
 import os
+import time
+from collections import deque
 from pathlib import Path
+from threading import Lock
 
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
@@ -11,6 +14,13 @@ from pydantic import BaseModel
 ROOT = Path(__file__).resolve().parent.parent
 
 app = FastAPI(title="The Unreliable Witness")
+
+# Basic in-memory rate limiting for Muse Spark requests
+REQUEST_LIMIT = 5
+REQUEST_WINDOW_SECONDS = 60
+
+request_times = deque()
+request_lock = Lock()
 
 app.mount(
     "/static",
@@ -69,6 +79,20 @@ def ask_investigation_partner(request: InvestigationQuestion):
 
     if not question or len(question) > 500:
         return {"answer": "Please enter a question under 500 characters."}
+
+        # Limit requests before calling Muse Spark
+    with request_lock:
+        now = time.monotonic()
+
+        while request_times and now - request_times[0] >= REQUEST_WINDOW_SECONDS:
+            request_times.popleft()
+
+        if len(request_times) >= REQUEST_LIMIT:
+            return {
+                "answer": "Too many AI questions right now. Please wait a minute."
+            }
+
+        request_times.append(now)
 
     with open(ROOT / "data" / "case_001.json", encoding="utf-8") as f:
         case = json.load(f)
