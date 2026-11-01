@@ -7,6 +7,33 @@
   <title>The Unreliable Witness</title>
 
   <style>
+
+   .case-header {
+  margin-bottom: 22px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #242044, #17182e);
+  border: 1px solid #4b4268;
+  border-radius: 12px;
+  }
+
+  .case-label {
+  color: #a78bfa;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  }
+
+  .case-header h2 {
+  color: #f5f3ff;
+  font-size: 1.7rem;
+  margin: 12px 0 8px;
+  }
+
+  .case-header p {
+  color: #c4b5fd;
+  margin-bottom: 0;
+    }
+
     .evidence-reminder {
   margin-top: 14px;
   padding: 12px 14px;
@@ -18,13 +45,14 @@
   line-height: 1.5;
     }
     body {
-      font-family: system-ui, sans-serif;
-      background: #111827;
-      color: #f9fafb;
-      max-width: 850px;
-      margin: 40px auto;
-      padding: 20px;
-    }
+    font-family: system-ui, sans-serif;
+    background: #0d1020;
+    color: #f9fafb;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+    box-sizing: border-box;
+      }
 
     h1 {
       color: #c4b5fd;
@@ -45,13 +73,25 @@
    }
 
     .evidence-item {
-      border-bottom: 1px solid #374151;
-      padding: 12px 0;
+  background: #17182e;
+  border: 1px solid #4b4268;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 14px;
+  transition: border-color 0.2s ease;
     }
 
-    .evidence-item:last-child {
-      border-bottom: none;
-    }
+   .evidence-item:hover {
+  border-color: #a78bfa;
+   }
+
+   .evidence-item:last-child {
+  margin-bottom: 0;
+  }
+
+   .evidence-item strong {
+  color: #c4b5fd;
+   }
 
     label {
       display: block;
@@ -93,6 +133,26 @@
       margin-top: 15px;
       line-height: 1.6;
     }
+
+    .investigation-layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+   }
+
+   .case-sidebar {
+    background: #17182e;
+    border: 1px solid #4b4268;
+    border-radius: 12px;
+    padding: 20px;
+   }
+
+  @media (max-width: 800px) {
+  .investigation-layout {
+    grid-template-columns: 1fr;
+  }
+}
   </style>
 </head>
 
@@ -100,6 +160,32 @@
 
   <h1>🔎 The Unreliable Witness</h1>
   <p>Evidence over confident AI.</p>
+
+  <div class="investigation-layout">
+
+  <aside class="case-sidebar">
+    <h2>📁 Case Files</h2>
+
+    <p>🔎 Case 01 — Active Investigation</p>
+    <p>🔒 More cases coming soon</p>
+
+    <hr>
+
+    <h2>🕵️ Investigator's Notes</h2>
+    <p>Examine the evidence.</p>
+    <p>Question your AI partner.</p>
+    <p>Verify before reaching a verdict.</p>
+
+    <p>👻 Spidery Ghost is watching!</p>
+  </aside>
+
+  <main>
+
+  <header class="case-header">
+  <span class="case-label">CASE FILE 01 • ACTIVE INVESTIGATION</span>
+  <h2>The Midnight Download</h2>
+  <p>Review the evidence. Question the AI. Reach your own conclusion.</p>
+  </header>
 
   <section class="panel">
     <h2>Case Briefing</h2>
