@@ -96,9 +96,5 @@ The game introduces investigation skills relevant to SOC and Blue Team work:
 - Evaluating AI-generated conclusions
 - Communicating an evidence-based verdict
 
-## 💜 DataSec Labs
-
-*The Unreliable Witness* is **DataSec Labs Case File 02**, part of the DataSec Chronicles learning ecosystem.
-
 **Find what doesn't belong. Verify what you find.**
 
