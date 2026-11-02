@@ -7,6 +7,26 @@
   <title>The Unreliable Witness</title>
 
   <style>
+   /* AI Investigation Partner */
+    #ai-response {
+    margin-top: 16px;
+    padding: 16px;
+    background: #17182e;
+    border: 1px solid #4b4268;
+    border-radius: 10px;
+    color: #e9e5ff;
+    line-height: 1.7;
+    white-space: pre-wrap;
+   }
+
+    #ai-response:empty {
+    display: none;
+   }
+
+   #ask-ai:disabled {
+   opacity: 0.6;
+   cursor: not-allowed;
+   }
 
    .case-header {
   margin-bottom: 22px;
@@ -34,7 +54,7 @@
   margin-bottom: 0;
     }
 
-    .evidence-reminder {
+  .evidence-reminder {
   margin-top: 14px;
   padding: 12px 14px;
   background: rgba(167, 139, 250, 0.08);
@@ -129,10 +149,22 @@
       background: #c4b5fd;
     }
 
-    #verdict-result {
-      margin-top: 15px;
-      line-height: 1.6;
-    }
+    /* Investigation Verdict Feedback */
+  #verdict-result {
+   margin-top: 16px;
+   padding: 16px;
+   background: #17182e;
+   border: 1px solid #4b4268;
+   border-left: 4px solid #a78bfa;
+   border-radius: 10px;
+   color: #e9e5ff;
+   line-height: 1.7;
+   white-space: pre-wrap;
+   }
+
+   #verdict-result:empty {
+     display: none;
+   }
 
     .investigation-layout {
     display: grid;
