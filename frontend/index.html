@@ -1,309 +1,140 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Unreliable Witness</title>
-
   <style>
-   /* AI Investigation Partner */
-    #ai-response {
-    margin-top: 16px;
-    padding: 16px;
-    background: #17182e;
-    border: 1px solid #4b4268;
-    border-radius: 10px;
-    color: #e9e5ff;
-    line-height: 1.7;
-    white-space: pre-wrap;
-   }
-
-    #ai-response:empty {
-    display: none;
-   }
-
-   #ask-ai:disabled {
-   opacity: 0.6;
-   cursor: not-allowed;
-   }
-
-   .case-header {
-  margin-bottom: 22px;
-  padding: 20px 24px;
-  background: linear-gradient(135deg, #242044, #17182e);
-  border: 1px solid #4b4268;
-  border-radius: 12px;
-  }
-
-  .case-label {
-  color: #a78bfa;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  }
-
-  .case-header h2 {
-  color: #f5f3ff;
-  font-size: 1.7rem;
-  margin: 12px 0 8px;
-  }
-
-  .case-header p {
-  color: #c4b5fd;
-  margin-bottom: 0;
-    }
-
-  .evidence-reminder {
-  margin-top: 14px;
-  padding: 12px 14px;
-  background: rgba(167, 139, 250, 0.08);
-  border-left: 3px solid #a78bfa;
-  border-radius: 6px;
-  color: #ddd6fe;
-  font-size: 0.9rem;
-  line-height: 1.5;
-    }
-    body {
-    font-family: system-ui, sans-serif;
-    background: #0d1020;
-    color: #f9fafb;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 24px;
-    box-sizing: border-box;
-      }
-
-    h1 {
-      color: #c4b5fd;
-    }
-
-    h2 {
-      font-size: 1.1rem;
-    }
-
-    .panel {
-      background: #1f2937;
-      border: 1px solid #4b4268;
-      border-left: 4px solid #a78bfa;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
-   }
-
-    .evidence-item {
-  background: #17182e;
-  border: 1px solid #4b4268;
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 14px;
-  transition: border-color 0.2s ease;
-    }
-
-   .evidence-item:hover {
-  border-color: #a78bfa;
-   }
-
-   .evidence-item:last-child {
-  margin-bottom: 0;
-  }
-
-   .evidence-item strong {
-  color: #c4b5fd;
-   }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    select,
-    textarea {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #6b7280;
-      background: #f9fafb;
-      color: #111827;
-      font: inherit;
-    }
-
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    button {
-      background: #a78bfa;
-      color: #111827;
-      font-weight: bold;
-      padding: 12px 18px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #c4b5fd;
-    }
-
-    /* Investigation Verdict Feedback */
-  #verdict-result {
-   margin-top: 16px;
-   padding: 16px;
-   background: #17182e;
-   border: 1px solid #4b4268;
-   border-left: 4px solid #a78bfa;
-   border-radius: 10px;
-   color: #e9e5ff;
-   line-height: 1.7;
-   white-space: pre-wrap;
-   }
-
-   #verdict-result:empty {
-     display: none;
-   }
-
-    .investigation-layout {
-    display: grid;
-    grid-template-columns: 240px minmax(0, 1fr);
-    gap: 20px;
-    align-items: start;
-   }
-
-   .case-sidebar {
-    background: #17182e;
-    border: 1px solid #4b4268;
-    border-radius: 12px;
-    padding: 20px;
-   }
-
-  @media (max-width: 800px) {
-  .investigation-layout {
-    grid-template-columns: 1fr;
-  }
-}
+:root { color-scheme: dark; --bg:#090f21; --panel:#141e34; --line:#344360; --purple:#aa82ff; --cyan:#5cd6ed; --amber:#f2ba69; --text:#f5f4ff; --muted:#b7c3df; }
+* { box-sizing:border-box; }
+body { margin:0; min-height:100vh; padding:28px clamp(16px,3vw,48px) 48px; background:radial-gradient(ellipse at 77% 0%,#26214d 0%,transparent 37%),radial-gradient(ellipse at 0% 65%,#14254b 0%,transparent 42%),var(--bg); color:var(--text); font:16px/1.55 system-ui,-apple-system,sans-serif; }
+.site-header { display:flex; align-items:center; justify-content:space-between; gap:20px; padding-bottom:23px; border-bottom:1px solid #303957; margin-bottom:24px; }
+.brand { display:flex; gap:15px; align-items:center; }
+.brand-icon { font-size:2.8rem; filter:drop-shadow(0 0 14px #aa82ff66); }
+h1 { margin:0; font-size:clamp(1.55rem,2.5vw,2.3rem); letter-spacing:-.03em; }
+.tagline { margin:2px 0 0; color:#c3b4f3; font-size:.87rem; letter-spacing:.12em; text-transform:uppercase; }
+.header-motto { color:var(--muted); border-left:1px solid #45516b; padding-left:22px; font-size:.93rem; }
+.investigation-layout { display:grid; grid-template-columns:240px minmax(0,1fr); gap:20px; max-width:1600px; margin:auto; align-items:start; }
+.case-sidebar { padding:22px 17px; background:linear-gradient(180deg,#151c35,#0e182c); border:1px solid #3d4b6b; border-radius:17px; box-shadow:0 12px 32px #0003; }
+.sidebar-heading { color:var(--purple); font-size:.87rem; font-weight:800; text-transform:uppercase; letter-spacing:.11em; margin:0 0 13px; }
+.case-nav { background:linear-gradient(110deg,#4e398b,#6245a8); padding:13px; border-radius:10px; font-weight:700; line-height:1.35; }
+.case-nav small { display:block; font-weight:500; opacity:.9; }
+.locked-case { color:#8390af; margin:14px 5px; font-size:.9rem; }
+.sidebar-divider { border:0; border-top:1px solid #35415c; margin:23px 0; }
+.sidebar-copy { color:#d6def2; font-size:.9rem; }
+.sidebar-copy p { margin:9px 0; }
+.ghost-card { margin-top:25px; background:linear-gradient(145deg,#32265c,#1c2241); border:1px solid #8060ce; border-radius:14px; padding:15px 11px; text-align:center; }
+.ghost-image { display:block; width:135px; max-width:100%; height:auto; margin:0 auto; filter:drop-shadow(0 7px 15px #9c72ff77); }
+.ghost-face { font-size:3.5rem; display:block; line-height:1.15; filter:drop-shadow(0 4px 12px #a78bfa66); }
+.ghost-card strong { color:#e0cbff; display:block; margin-top:8px; }
+.ghost-card p { font-size:.84rem; color:#e3d8ff; margin:5px 0 0; }
+.case-header { padding:34px 25px; min-height:170px; display:flex; flex-direction:column; justify-content:center; margin-bottom:18px; background:linear-gradient(90deg,rgba(9,14,32,.97) 0%,rgba(13,20,43,.9) 42%,rgba(13,20,43,.28) 100%),url("/static/assets/investigation-desk.png") center 53% / cover no-repeat; border:1px solid #514477; border-radius:15px; }
+.case-label { color:#bd9aff; letter-spacing:.15em; font-size:.74rem; font-weight:800; }
+.case-header h2 { font-size:clamp(1.55rem,2.2vw,2rem); margin:7px 0 5px; }
+.case-header p { margin:0; color:#c9baf1; }
+.panel { background:linear-gradient(155deg,#1b2940,#152034); border:1px solid #3a4b6b; border-radius:15px; padding:23px; margin-bottom:18px; box-shadow:0 9px 25px #0002; min-width:0; }
+.panel h2 { font-size:1.18rem; margin:0 0 13px; }
+.briefing-panel { border-left:4px solid var(--purple); }
+#briefing { margin-bottom:0; color:#e1e7f5; }
+#evidence { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:13px; }
+.evidence-item { background:#121b30; border:1px solid #5a4c88; border-top:4px solid var(--purple); border-radius:12px; padding:17px 15px; min-width:0; overflow-wrap:anywhere; transition:transform .15s,border-color .15s; }
+.evidence-item:hover { transform:translateY(-2px); border-color:#c2aaff; }
+.evidence-details { margin-top:12px; border-top:1px solid #43516b; padding-top:12px; }
+.evidence-details summary { cursor:pointer; color:#d9c7ff; font-weight:750; list-style:none; border:1px solid #665b92; border-radius:8px; padding:9px 10px; text-align:center; background:#2b2948; }
+.evidence-details summary::-webkit-details-marker { display:none; }
+.evidence-details summary:focus-visible { outline:2px solid #c6a8ff; outline-offset:2px; }
+.evidence-details[open] summary { margin-bottom:12px; }
+.evidence-details .detail-line { margin:8px 0; font-size:.86rem; color:#dce5f7; white-space:pre-wrap; }
+.evidence-item strong { display:block; color:#d1b6ff; font-size:.93rem; }
+.evidence-item p { font-size:.88rem; line-height:1.55; }
+.evidence-item p:nth-child(2) { color:#a9b7d3; font-size:.78rem; font-variant-numeric:tabular-nums; }
+.evidence-tone-1 { border-color:#326a83; border-top-color:var(--cyan); }
+.evidence-tone-1 strong { color:#8ae8f6; }
+.evidence-tone-1:hover { border-color:var(--cyan); }
+.evidence-tone-2 { border-color:#80623e; border-top-color:var(--amber); }
+.evidence-tone-2 strong { color:#ffd395; }
+.evidence-tone-2:hover { border-color:var(--amber); }
+.interaction-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:18px; align-items:start; }
+.interaction-grid .panel { margin-bottom:0; height:100%; }
+.ai-panel { border:1px solid #9768e7; box-shadow:0 0 0 1px #9768e722,0 0 28px #8554df20; }
+.ai-heading { display:flex; gap:13px; align-items:center; margin-bottom:13px; }
+.ai-avatar { width:54px; height:54px; display:grid; place-items:center; background:radial-gradient(circle,#5b68a9,#262c57); border:1px solid #9e7af5; border-radius:17px; font-size:2rem; box-shadow:0 0 19px #9a70f166; flex-shrink:0; }
+.ai-image { width:70px; height:70px; object-fit:contain; flex-shrink:0; filter:drop-shadow(0 0 13px #65d8ff66); }
+.ai-heading h2 { margin:0; font-size:1.35rem; }
+.ai-heading small { color:#bdb2e8; font-size:.73rem; letter-spacing:.1em; text-transform:uppercase; }
+.ai-intro { background:#202e48; border-radius:10px; padding:13px; color:#dce4f4; font-size:.89rem; margin:0 0 15px; }
+label { display:block; margin:12px 0 7px; color:#e2e8f6; font-size:.91rem; font-weight:600; }
+textarea, select { display:block; width:100%; min-width:0; padding:12px 13px; border:1px solid #556581; border-radius:9px; background:#0e192e; color:#f8f7ff; font:inherit; }
+textarea { min-height:88px; resize:vertical; }
+textarea::placeholder { color:#98a6c4; }
+textarea:focus,select:focus { outline:2px solid #b28cff; outline-offset:2px; }
+button { padding:12px 18px; border:0; border-radius:9px; background:linear-gradient(120deg,#bc93ff,#9e72f0); color:#111027; font:inherit; font-weight:800; cursor:pointer; box-shadow:0 5px 16px #0002; }
+button:hover { filter:brightness(1.1); }
+button:disabled { opacity:.55; cursor:not-allowed; }
+#ask-ai,#submit-verdict { width:100%; margin-top:12px; }
+#ai-response { white-space:pre-wrap; overflow-wrap:anywhere; background:#242048; border:1px solid #6f5cb6; border-radius:12px 12px 12px 3px; color:#f2edff; padding:15px; margin-top:17px; line-height:1.65; }
+#ai-response:empty,#verdict-result:empty { display:none; }
+.evidence-reminder { padding:12px; margin:16px 0 0; border-left:3px solid var(--purple); background:#a78bfa12; color:#dcd0ff; border-radius:7px; font-size:.86rem; }
+.verdict-heading { display:flex; gap:12px; align-items:center; }
+.verdict-heading span { font-size:2rem; }
+.verdict-heading h2 { margin:0; }
+#question { color:#dbe3f3; }
+#verdict-result { margin-top:16px; padding:15px; background:#1c2740; border:1px solid #6659a1; border-left:4px solid var(--purple); border-radius:10px; color:#e9e5ff; line-height:1.6; white-space:pre-wrap; }
+.footer-note { text-align:center; margin:25px 0 0; color:#9eaad0; font-size:.85rem; }
+@media(max-width:1150px) { #evidence { grid-template-columns:1fr; } .interaction-grid { grid-template-columns:1fr; } }
+@media(max-width:760px) { body { padding:17px 13px 32px; } .site-header { align-items:flex-start; } .header-motto { display:none; } .investigation-layout { grid-template-columns:1fr; } .case-sidebar { display:grid; grid-template-columns:1fr 1fr; gap:10px 20px; } .case-sidebar .sidebar-divider { display:none; } .ghost-card { grid-column:1/-1; margin-top:6px; } .panel { padding:17px; } }
+@media(max-width:470px) { .case-sidebar { display:block; } .ghost-card { margin-top:18px; } .brand-icon { font-size:2rem; } .tagline { letter-spacing:.05em; } }
   </style>
 </head>
-
 <body>
-
-  <h1>🔎 The Unreliable Witness</h1>
-  <p>Evidence over confident AI.</p>
-
-  <div class="investigation-layout">
-
-  <aside class="case-sidebar">
-    <h2>📁 Case Files</h2>
-
-    <p>🔎 Case 01 — Active Investigation</p>
-    <p>🔒 More cases coming soon</p>
-
-    <hr>
-
-    <h2>🕵️ Investigator's Notes</h2>
-    <p>Examine the evidence.</p>
-    <p>Question your AI partner.</p>
-    <p>Verify before reaching a verdict.</p>
-
-    <p>👻 Spidery Ghost is watching!</p>
-  </aside>
-
-  <main>
-
-  <header class="case-header">
-  <span class="case-label">CASE FILE 01 • ACTIVE INVESTIGATION</span>
-  <h2>The Midnight Download</h2>
-  <p>Review the evidence. Question the AI. Reach your own conclusion.</p>
+  <header class="site-header">
+    <div class="brand"><span class="brand-icon" aria-hidden="true">🗂️</span><div><h1>The Unreliable Witness</h1><p class="tagline">A cybersecurity mystery game</p></div></div>
+    <div class="header-motto">Find the evidence.<br>Question the AI.<br>Make the call.</div>
   </header>
-
-  <section class="panel">
-    <h2>Case Briefing</h2>
-    <p id="briefing">Loading investigation...</p>
-  </section>
-
-  <section class="panel">
-    <h2>Evidence</h2>
-    <div id="evidence">Loading evidence...</div>
-  </section>
-
-
-<section class="panel">
-  <h2>🤖 AI Investigation Partner</h2>
-
-  <p>
-    Ask Muse Spark about the evidence.
-    Remember: AI conclusions should be verified.
-  </p>
-
-  <label for="ai-question">Your question:</label>
-
-  <textarea
-    id="ai-question"
-    maxlength="500"
-    placeholder="What does the unfamiliar IP address tell us?"
-  ></textarea>
-
-  <p>
-    <button type="button" id="ask-ai">
-      Ask Muse Spark
-    </button>
-  </p>
-
-  <div id="ai-response" role="status"></div>
-
-  <p class="evidence-reminder">
-  🔎 Investigator's Reminder: AI responses are not evidence.
-  Verify every claim against the case file before reaching a verdict.
-  </p>
-  </section>
-
-  <section class="panel">
-    <h2>Your Verdict</h2>
-
-    <p id="question">
-      Review the evidence before deciding.
-    </p>
-
-    <label for="verdict-choice">
-      Your conclusion:
-    </label>
-
-    <select id="verdict-choice">
-      <option value="">Choose a verdict</option>
-      <option value="compromised">
-        Account compromise confirmed
-      </option>
-      <option value="legitimate">
-        Legitimate activity confirmed
-      </option>
-      <option value="insufficient_evidence">
-        Insufficient evidence to determine
-      </option>
-    </select>
-
-    <p>
-      <label for="reasoning">
-        Explain your reasoning:
-      </label>
-    </p>
-
-    <textarea
-      id="reasoning"
-      placeholder="Which evidence supports your conclusion?"
-    ></textarea>
-
-    <p>
-      <button type="button" id="submit-verdict">
-        Submit Verdict
-      </button>
-    </p>
-
-    <div id="verdict-result" role="status"></div>
-  </section>
-
+  <div class="investigation-layout">
+    <aside class="case-sidebar" aria-label="Investigation sidebar">
+      <div>
+        <h2 class="sidebar-heading">Case Files</h2>
+        <div class="case-nav">🔎 Case 01 <small>The Midnight Download · Active</small></div>
+        <p class="locked-case">🔒 Additional cases · Coming soon</p>
+      </div>
+      <div>
+        <hr class="sidebar-divider">
+        <h2 class="sidebar-heading">Your Role</h2>
+        <div class="sidebar-copy"><p>🕵️ You are the investigator. Examine the evidence, ask Muse Spark questions, and decide what the facts support.</p></div>
+        <h2 class="sidebar-heading" style="margin-top:21px">Remember</h2>
+        <div class="sidebar-copy"><p>• Look at the evidence.</p><p>• Question assumptions.</p><p>• Verify before deciding.</p></div>
+      </div>
+      <div class="ghost-card"><img class="ghost-image" src="/static/assets/spidery-ghost.png" alt="Spidery Ghost, a friendly detective mascot holding a magnifying glass"><strong>Spidery Ghost says:</strong><p>Evidence over confidence!</p></div>
+    </aside>
+    <main>
+      <header class="case-header"><span class="case-label">CASE FILE 01 · ACTIVE INVESTIGATION</span><h2>The Midnight Download</h2><p>Review the evidence. Question the AI. Reach your own conclusion.</p></header>
+      <section class="panel briefing-panel"><h2>📋 Case Briefing</h2><p id="briefing">Loading investigation...</p></section>
+      <section class="panel"><h2>🗃️ Evidence</h2><div id="evidence">Loading evidence...</div></section>
+      <div class="interaction-grid">
+        <section class="panel ai-panel">
+          <div class="ai-heading"><img class="ai-image" src="/static/assets/muse-spark.png" alt="Friendly Muse Spark robot avatar"><div><h2>Muse Spark</h2><small>AI investigation partner</small></div></div>
+          <p class="ai-intro">Ask questions about the evidence. AI conclusions should always be verified.</p>
+          <label for="ai-question">Your question</label>
+          <textarea id="ai-question" maxlength="500" placeholder="What does the unfamiliar IP address tell us?"></textarea>
+          <button type="button" id="ask-ai">Ask Muse Spark ↗</button>
+          <div id="ai-response" role="status" aria-live="polite"></div>
+          <p class="evidence-reminder">🔎 Investigator's Reminder: AI responses are not evidence. Verify every claim against the case file before reaching a verdict.</p>
+        </section>
+        <section class="panel verdict-panel">
+          <div class="verdict-heading"><span aria-hidden="true">⚖️</span><h2>Your Verdict</h2></div>
+          <p id="question">Review the evidence before deciding.</p>
+          <label for="verdict-choice">Your conclusion</label>
+          <select id="verdict-choice"><option value="">Choose a verdict</option><option value="compromised">Account compromise confirmed</option><option value="legitimate">Legitimate activity confirmed</option><option value="insufficient_evidence">Insufficient evidence to determine</option></select>
+          <label for="reasoning">Explain your reasoning</label>
+          <textarea id="reasoning" placeholder="Which evidence supports your conclusion?"></textarea>
+          <button type="button" id="submit-verdict">⚖️ Submit Verdict</button>
+          <div id="verdict-result" role="status" aria-live="polite"></div>
+        </section>
+      </div>
+      <p class="footer-note">The tool changes. The question doesn't. · Evidence over confident AI.</p>
+    </main>
+  </div>
   <script>
     // Load the fictional investigation from FastAPI.
     async function loadCase() {
@@ -330,6 +161,8 @@
         for (const item of caseData.evidence) {
           const entry = document.createElement("div");
           entry.className = "evidence-item";
+          const evidenceIndex = evidencePanel.children.length;
+          entry.classList.add(`evidence-tone-${evidenceIndex % 3}`);
 
           const heading = document.createElement("strong");
           heading.textContent =
@@ -338,14 +171,26 @@
           const timestamp = document.createElement("p");
           timestamp.textContent = item.timestamp;
 
-          const description = document.createElement("p");
-          description.textContent = item.description;
+          // A compact summary plus expandable original evidence details.
+          // All values come from /api/case; no new evidence is invented.
+          const summary = document.createElement("p");
+          summary.textContent = item.type || "Evidence item";
 
-          entry.append(
-            heading,
-            timestamp,
-            description
-          );
+          const details = document.createElement("details");
+          details.className = "evidence-details";
+          const toggle = document.createElement("summary");
+          toggle.textContent = "View Details";
+          const timeDetail = document.createElement("p");
+          timeDetail.className = "detail-line";
+          timeDetail.textContent = `Timestamp: ${item.timestamp || "Not provided"}`;
+          const description = document.createElement("p");
+          description.className = "detail-line";
+          description.textContent = item.description || "No additional description provided.";
+          details.append(toggle, timeDetail, description);
+          details.addEventListener("toggle", () => {
+            toggle.textContent = details.open ? "Hide Details" : "View Details";
+          });
+          entry.append(heading, summary, details);
 
           evidencePanel.appendChild(entry);
         }
@@ -469,6 +314,6 @@
     // Start the investigation.
     loadCase();
   </script>
-
 </body>
 </html>
+
