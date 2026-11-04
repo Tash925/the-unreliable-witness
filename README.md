@@ -22,6 +22,22 @@ Players can:
 
 The central lesson: **AI-generated answers are not evidence.**
 
+
+## 📸 Gameplay Preview
+
+### 🔎 Case File 01: The Midnight Download
+
+Explore the investigation dashboard, review the case briefing, and examine three interactive evidence records.
+
+![The Unreliable Witness investigation dashboard](screenshots/case-overview.png)
+
+### 🤖 Question the AI. Verify the Evidence.
+
+Ask Muse Spark questions, evaluate its responses against the evidence, and submit an independent verdict.
+
+![Muse Spark investigation and verdict feedback](screenshots/muse-spark.png)
+
+
 ## 📁 Case File 01: The Midnight Download
 
 An employee account logs in late at night from an unfamiliar IP address and downloads a confidential spreadsheet.
